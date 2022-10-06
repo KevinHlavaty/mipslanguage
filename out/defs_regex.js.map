@@ -1,0 +1,1 @@
+{"version":3,"file":"defs_regex.js","sourceRoot":"","sources":["../src/defs_regex.ts"],"names":[],"mappings":";;AAAA,MAAM,OAAO,GAAG,CAAC,GAAyB,EAAE,OAAe,GAAG,EAAE,EAAE,CACjE,IAAI,MAAM,CAAC,GAAG,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC,OAAO,CAAC,MAAM,EAAE,EAAE,CAAC,EAAE,IAAI,CAAC,CAAC;AAElD,kBAAe;IACd,eAAe,EAAE,sBAAsB;IACvC,kBAAkB,EAAE,mBAAmB;CACvC,CAAA"}

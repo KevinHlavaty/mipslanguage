@@ -1,0 +1,63 @@
+{
+  "name": "mipslanguage",
+  "displayName": "MipsLanguage",
+  "description": "Mips code lens",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.71.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+		"onCommand:extension.helloWorld",
+    "onLanguage:mips"
+	],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Mips Assembly configuration",
+      "properties": {
+        "mipslanguage.files.include": {
+          "type": "string",
+          "default": "**/*.{asm}",
+          "description": "Files to include and work with. If you, or your macro-assembler using a different conventions of source file extensions then change it here."
+        },
+        "mipslanguage.files.exclude": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "Choose files or directories to exclude (e.g '**/*.{lst}')."
+        }
+      }
+    },
+    "languages": [{
+      "id": "mips",
+      "aliases": ["Mips", "mips"],
+      "extensions": [".asm"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "mips",
+      "scopeName": "source.mipsasm",
+      "path": "./syntaxes/mips.tmLanguage.json"
+    }]
+  },
+  "scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint . --ext .ts,.tsx",
+		"watch": "tsc -watch -p ./"
+	},
+  "devDependencies": {
+		"@types/node": "^16.11.7",
+		"@types/vscode": "^1.39.0",
+		"@typescript-eslint/eslint-plugin": "^5.30.0",
+		"@typescript-eslint/parser": "^5.30.0",
+		"eslint": "^8.13.0",
+		"typescript": "^4.8.4"
+	}
+}

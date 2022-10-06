@@ -1,0 +1,1 @@
+{"version":3,"file":"MipsDefinitionProvider.js","sourceRoot":"","sources":["../src/MipsDefinitionProvider.ts"],"names":[],"mappings":";;;AAIA,MAAa,sBAAsB;IAC/B,YAAmB,eAAgC;QAAhC,oBAAe,GAAf,eAAe,CAAiB;IAAG,CAAC;IAEvD,iBAAiB,CACb,QAA6B,EAC7B,QAAyB,EACzB,KAA+B;QAE/B,OAAO,IAAI,CAAC,eAAe,CAAC,0BAA0B,CAAC,QAAQ,EAAE,QAAQ,EAAE,KAAK,CAAC,CAAC;IACtF,CAAC;CAEJ;AAXD,wDAWC"}
