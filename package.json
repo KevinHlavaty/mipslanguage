@@ -2,7 +2,7 @@
   "name": "mipslanguage",
   "displayName": "MipsLanguage",
   "publisher": "DaHammer6402",
-  "description": "Mips code lens",
+  "description": "Provides syntax highlighting and 'go to definition' for mips assembly language",
   "repository": "https://github.com/KevinHlavaty/mipslanguage",
   "version": "0.0.2",
   "icon": "images/logo.png",
