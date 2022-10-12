@@ -5,13 +5,16 @@ const vscode = require("vscode");
 const defs_regex_1 = require("./defs_regex");
 class SymbolProcessor {
     constructor() {
-        vscode.workspace.onDidChangeTextDocument((event) => this._fileChanged(event.document.uri));
-        this._watcher = vscode.workspace.createFileSystemWatcher("**/.asm");
+        vscode.window.onDidChangeActiveTextEditor((editor) => {
+            if (editor)
+                this._changedTextDocument(editor.document.uri);
+        });
+        this._watcher = vscode.workspace.createFileSystemWatcher("**/.{asm,s}");
         this._watcher.onDidChange(this._fileChanged);
         this._watcher.onDidDelete(this._fileDeleted);
         let currentUri = vscode.window.activeTextEditor?.document.uri;
         if (currentUri) {
-            this._lastFolder = vscode.workspace.getWorkspaceFolder(currentUri);
+            this._lastFolderPath = currentUri.path.substring(0, currentUri.path.lastIndexOf("/"));
         }
         this.files = new Map();
         this._documentAllFilesInCurrentFolder();
@@ -20,14 +23,14 @@ class SymbolProcessor {
         const currentUri = vscode.window.activeTextEditor?.document.uri;
         if (!currentUri)
             return;
-        let currentFolder = vscode.workspace.getWorkspaceFolder(currentUri);
-        if (!currentFolder)
-            return;
-        vscode.workspace.findFiles(new vscode.RelativePattern(currentFolder, "*.asm"))
+        let currentFolderPath = currentUri.fsPath.substring(0, currentUri.fsPath.lastIndexOf("/"));
+        if (currentFolderPath.length === 0)
+            currentFolderPath = currentUri.fsPath.substring(0, currentUri.fsPath.lastIndexOf("\\"));
+        vscode.workspace.findFiles(new vscode.RelativePattern(currentFolderPath, "*.{asm,s}"))
             .then(uris => uris.forEach(uri => this._document(uri)));
     }
     async _document(uri) {
-        if (!uri.path.endsWith(".asm"))
+        if (!uri.path.endsWith(".asm") && !uri.path.endsWith(".s"))
             return;
         let currentMap = new Map();
         let currentDocument = await vscode.workspace.openTextDocument(uri);
@@ -49,15 +52,23 @@ class SymbolProcessor {
         }
         this.files.set(uri.path, currentMap);
     }
+    _changedTextDocument(uri) {
+        let currentFolderPath = uri.path.substring(0, uri.path.lastIndexOf("/"));
+        if (!currentFolderPath || !this._lastFolderPath || currentFolderPath !== this._lastFolderPath) {
+            this.files.clear();
+            this._documentAllFilesInCurrentFolder();
+            this._lastFolderPath = currentFolderPath;
+        }
+    }
     _fileChanged(uri) {
-        let uriFolder = vscode.workspace.getWorkspaceFolder(uri);
-        if (uriFolder && uriFolder === this._lastFolder) {
+        let currentFolderPath = uri.path.substring(0, uri.path.lastIndexOf("/"));
+        if (currentFolderPath && this._lastFolderPath && currentFolderPath === this._lastFolderPath) {
             this._document(uri);
         }
     }
     _fileDeleted(uri) {
-        let uriFolder = vscode.workspace.getWorkspaceFolder(uri);
-        if (uriFolder && uriFolder === this._lastFolder) {
+        let currentFolderPath = uri.path.substring(0, uri.path.lastIndexOf("/"));
+        if (currentFolderPath && this._lastFolderPath && currentFolderPath === this._lastFolderPath) {
             this.files.delete(uri.path);
         }
     }
@@ -66,7 +77,12 @@ class SymbolProcessor {
         if (!range)
             return undefined;
         const text = document.getText(range);
-        return this.files.get(document.uri.path)?.get(text);
+        for (let file of this.files.values()) {
+            let result = file.get(text);
+            if (result)
+                return result;
+        }
+        return undefined;
     }
 }
 exports.SymbolProcessor = SymbolProcessor;

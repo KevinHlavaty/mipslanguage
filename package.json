@@ -1,8 +1,12 @@
 {
   "name": "mipslanguage",
   "displayName": "MipsLanguage",
+  "publisher": "DaHammer6402",
   "description": "Mips code lens",
-  "version": "0.0.1",
+  "repository": "https://github.com/KevinHlavaty/mipslanguage",
+  "version": "0.0.2",
+  "icon": "images/logo.png",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -21,7 +25,7 @@
       "properties": {
         "mipslanguage.files.include": {
           "type": "string",
-          "default": "**/*.{asm}",
+          "default": "**/*.{asm,s}",
           "description": "Files to include and work with. If you, or your macro-assembler using a different conventions of source file extensions then change it here."
         },
         "mipslanguage.files.exclude": {
@@ -37,7 +41,7 @@
     "languages": [{
       "id": "mips",
       "aliases": ["Mips", "mips"],
-      "extensions": [".asm"],
+      "extensions": [".asm", ".s"],
       "configuration": "./language-configuration.json"
     }],
     "grammars": [{
